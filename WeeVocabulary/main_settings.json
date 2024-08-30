@@ -1,0 +1,20 @@
+{
+  "global": "/Users/gaetan/Desktop/new_words.txt",
+  "data": "data/output/main_list.csv",
+  "english": {
+    "json_waiting_list": "data/output/en_waitlist.json",
+    "text_backup_list": "data/backup/en_backup.txt",
+    "deck_id": 1,
+    "deck_name": "VocEnglish",
+    "output_package": "data/output/en_package.apkg",
+    "model_with_reverse": true
+  },
+  "french": {
+    "json_waiting_list": "data/output/fr_waitlist.json",
+    "text_backup_list": "data/backup/fr_backup.txt",
+    "deck_id": 2,
+    "deck_name": "Vocabulaire",
+    "output_package": "data/output/fr_package.apkg",
+    "model_with_reverse": false
+  }
+}
