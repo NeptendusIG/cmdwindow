@@ -16,7 +16,7 @@ from cmdwindow.class_dir.command_window import CommandWindow
 import cmdwindow.log_config as log_config
 logger = Settings.setlog_module(log_config, "debugging")
 
-root_path = "/Users/gaetan/python_workspace/en_cours/cmdwindow-project/"
+root_path = "/Users/gaetan/python_workspace/_ongoing/cmdwindow-project/"
 root_path += "cmdwindow"
 
 # -- OPÉRATIONS DÉFINIES --
@@ -24,7 +24,8 @@ def start_passwords():
     python = sys.executable
     #script_path = "/Users/gaetan/python_workspace/en_cour/PasswordManager/main.py"
     script_path = root_path + "/PasswordManager/main.py"
-    subprocess.Popen([python, script_path])
+    os.system("python -m pswmanage")
+    # subprocess.Popen([python, script_path])
 
 
 def start_vocavulaire():
