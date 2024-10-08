@@ -57,6 +57,7 @@ associate_longargs = {
     "--autobackup": "AutoBackup",
     "--youtubedown": "YoutubeDown",
 }
+associate_longargs_reversed = {value: key for key, value in associate_longargs.items()}
 
 associate_shortargs = {
     "-p": "Passwords",
@@ -66,6 +67,7 @@ associate_shortargs = {
     "-a": "AutoBackup",
     "-y": "YoutubeDown",
 }
+associate_shortargs_reversed = {value: key for key, value in associate_shortargs.items()}
 
 # -- FONCTIONS MAÎTRES --
 def open_command_window():
@@ -82,6 +84,9 @@ def go_to_env():
 
 def show_help():
     print("HELP :")
+    for key in operations.keys():
+        associate_longargs.get
+        print(f"{key}, \t {associate_shortargs_reversed[key]}, {associate_longargs_reversed[key]}")
 
 def manage_by_args() -> str:
     """Fonction sui interprète les arguments de la ligne de commande
@@ -93,7 +98,9 @@ def manage_by_args() -> str:
     
     logger.info(f'CMD Window : CALL program "{sys.argv[1]}"')
     first_arg = sys.argv[1]
-    if first_arg == "DEFAULT_WINDOW_GUI":
+    if first_arg == "help" or first_arg == "--help" or first_arg == "-h":
+        show_help()
+    elif first_arg == "DEFAULT_WINDOW_GUI":
         logger.info("CMD Window : GUI mode - START")
         open_command_window()
         logger.info("CMD Window : GUI mode - CLOSED")
