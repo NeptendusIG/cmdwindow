@@ -13,48 +13,25 @@ from cmdwindow.class_dir.command_window import CommandWindow
 
 
 # Settings
-import cmdwindow.log_config as log_config
-logger = Settings.setlog_module(log_config, "debugging")
+logger = Settings.setup_logging("debugging")
 
 root_path = "/Users/gaetan/python_workspace/_ongoing/cmdwindow-project/"
 root_path += "cmdwindow"
 
 # -- OPÉRATIONS DÉFINIES --
-def start_passwords():
-    python = sys.executable
-    #script_path = "/Users/gaetan/python_workspace/en_cour/PasswordManager/main.py"
-    script_path = root_path + "/PasswordManager/main.py"
-    os.system("python -m pswmanage")
-    # subprocess.Popen([python, script_path])
+def start_package(package_name):
+    logger.info(f'CMD Window : LAUNCH app "{package_name}"')
+    Settings.launch_package(package_name)
 
-
-def start_vocavulaire():
-    python = sys.executable
-    script_path = root_path + "WeeVocabulary/main.py"
-    #sys.path.append("/Users/gaetan/python_workspace/programmes/PasswordManager")
-    #sys.path.append("/Users/gaetan/python_workspace/programmes/PasswordManager/utilitaire")
-    subprocess.Popen([python, script_path])
-
-
-def start_finances():
-    python = sys.executable
-    script_path = root_path + "FinancesTracker/__main__.py"
-    subprocess.Popen([python, script_path])
-
-
-def start_editor():
-    python = sys.executable
-    script_path = root_path + "TextEditor/main.py"
-    subprocess.Popen([python, script_path])
 
 # -- VARIABLES INITIALES -- 
 operantions = {
-    "Passwords": start_passwords,
-    "Vocavulaire": start_vocavulaire,
-    "Finances": start_finances,
-    "TextEditor": start_editor,
-    "AutoBackup": None,
-    "YoutubeDown": None, 
+    "Passwords": lambda: start_package("pswmanage"),
+    "Vocavulaire": lambda: start_package("weevocabulary"),
+    "Finances": lambda: start_package("financetrack"),
+    "TextEditor": lambda: start_package("txteditor"),
+    "AutoBackup": lambda: start_package("autobackup"),
+    "YoutubeDown": lambda: start_package("youtubedown"), 
 }
 
 # -- FONCTIONS MAÎTRES --
