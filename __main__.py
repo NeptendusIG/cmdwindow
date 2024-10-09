@@ -7,6 +7,7 @@
 # -- IMPORTS --
 # Modules
 import sys, subprocess, os
+import importlib
 # import utility.utility as uti
 from utility import GUI, Settings, File
 from cmdwindow.class_dir.command_window import CommandWindow
@@ -19,34 +20,33 @@ root_path = "/Users/gaetan/python_workspace/_ongoing/cmdwindow-project/"
 root_path += "cmdwindow"
 
 # -- OPÉRATIONS DÉFINIES --
-def start_package(package_name):
-    logger.info(f'CMD Window : LAUNCH app "{package_name}"')
-    Settings.launch_package(package_name)
+def start_package(package_name, *args):
+    """CURRENTLY NOT USED"""
+    Settings.launch_package(package_name, *args)
 
-
-def launch_from_longarg(long_arg, *args):
-    if long_arg in associate_longargs.keys():
-        operations[associate_longargs[long_arg]](*args)
+def launch_from_arg(string_arg, *args):
+    if string_arg in associate_longargs.keys():
+        package_name = operations[associate_longargs[string_arg]]
+        logger.info(f'CMD Window : LAUNCH app "{package_name}"')
+        Settings.launch_package(package_name, *args)
+    elif string_arg in associate_shortargs.keys():
+        package_name = operations[associate_shortargs[string_arg]]
+        logger.info(f'CMD Window : LAUNCH app "{package_name}"')
+        Settings.launch_package(package_name, *args)
     else:
-        logger.error(f'CMD Window : ERROR - Package "{long_arg}" not found')
+        logger.error(f'CMD Window : ERROR - Package "{string_arg}" not found')
         # raise ValueError(f'CMD Window : ERROR - Package "{long_arg}" not found')
         show_help()
 
-def launch_from_shortarg(short_arg, *args):
-    if short_arg in associate_shortargs.keys():
-        operations[associate_shortargs[short_arg]](*args)
-    else:
-        logger.error(f'CMD Window : ERROR - Package "{short_arg}" not found')
-        show_help()
 
 # -- VARIABLES INITIALES -- 
 operations = {
-    "Passwords": lambda *x: start_package("pswmanage", *x),
-    "Vocabulaire": lambda *x: start_package("weevocabulary", *x),
-    "Finances": lambda *x: start_package("financetrack", *x),
-    "TextEditor": lambda *x: start_package("txteditor", *x),
-    "AutoBackup": lambda *x: start_package("autobackup", *x),
-    "YoutubeDown": lambda *x: start_package("youtubedown", *x), 
+    "Passwords": "pswmanage",
+    "Vocabulaire": "weevocabulary",
+    "Finances": "financetrack",
+    "TextEditor": "txteditor",
+    "AutoBackup": "autobackup",
+    "YoutubeDown": "youtubedown", 
 }
 
 associate_longargs = {
@@ -84,9 +84,16 @@ def go_to_env():
 
 def show_help():
     print(__help__)
-    for key in operations.keys():
-        associate_longargs.get
-        print(f"{key}, \t {associate_shortargs_reversed[key]}, {associate_longargs_reversed[key]}")
+    for module_name in operations.keys():
+        try:
+            module = importlib.import_module(operations[module_name])
+            if hasattr(module, '__help__'):
+                module_help = getattr(module, '__help__')
+                print(f"{module_name}, \t {associate_shortargs_reversed[module_name]}, {associate_longargs_reversed[module_name]}\n\t{module_help}")
+            else:
+                print(f"{module_name}, \t {associate_shortargs_reversed[module_name]}, {associate_longargs_reversed[module_name]}")
+        except ModuleNotFoundError:
+            print(f"{module_name}, \t {associate_shortargs_reversed[module_name]}, {associate_longargs_reversed[module_name]}")
 
 def manage_by_args() -> str:
     """Fonction sui interprète les arguments de la ligne de commande
@@ -104,14 +111,10 @@ def manage_by_args() -> str:
         logger.info("CMD Window : GUI mode - START")
         open_command_window()
         logger.info("CMD Window : GUI mode - CLOSED")
-    elif first_arg.startswith("--"):
-        # Si le premier argument est une option -> Lancer le package correspondant
-        logger.info(f'CMD Window : Terminal mode "{first_arg}"')
-        launch_from_longarg(first_arg, *sys.argv[2:]) 
     elif first_arg.startswith("-"):
         # Si le premier argument est une option -> Lancer le package correspondant
         logger.info(f'CMD Window : Terminal mode "{first_arg}"')
-        launch_from_shortarg(first_arg, *sys.argv[2:])
+        launch_from_arg(first_arg, *sys.argv[2:]) 
 
 def main():
     manage_by_args()
